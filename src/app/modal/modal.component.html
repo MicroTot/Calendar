@@ -1,0 +1,12 @@
+<p>Add a new Schedule</p>
+<!-- <textarea type="textarea" placeholder="Title" value="" (change)="onStartNameChanged($event)"></textarea><br><br>
+<input type="datetime-local" placeholder="start time" value="{{times}}" (change)="onEndChanged($event)"><br><br>
+<input type="datetime-local" value="{{times}}" (change)="onTitleChanged($event)"><br><br>
+<input type="submit" (click)="postData()" /> -->
+
+
+
+<label>title</label><input value="{{title}}" (change)="onTitleChanged($event)"><br><br>
+<label>Start time</label><input type="text" value="{{times}}" (change)="onStartChanged($event)"><br><br>
+<label >end time</label><input type="text" value="{{times}}" (change)="onEndChanged($event)"><br><br>
+<input type="submit"(click)="postData()"><br><br>
