@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CalendarOptions, Duration } from '@fullcalendar/angular';
-import timeGridPlugin from '@fullcalendar/timegrid';
 
 let d = new Date();
 var t = d.getDay();

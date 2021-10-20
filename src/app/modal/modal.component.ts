@@ -4,11 +4,10 @@ import { ServicesService } from '../services.service'
 import { DatePipe } from '@angular/common'
 
 const scheduleStart:any = localStorage.getItem('startTime')
-console.log(scheduleStart)
 const date = new Date(scheduleStart)
 var x =  date.setDate(date.getDate())
 const t = new Date(x.toLocaleString())
-// console.log(typeof + t)
+console.log(typeof + t)
 // const IsoDateTo = moment(scheduleStart,'yyyy-MM-ddThh:mm').format('yyyy-MM-ddThh:mm');
 // console.log(typeof + IsoDateTo)
 // const www = new Date( Date.parse(scheduleStart));
@@ -22,12 +21,12 @@ const t = new Date(x.toLocaleString())
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  times = scheduleStart
+  times = scheduleStart.sr
   start: any;
   end: any;
   title: any;
 
-  constructor(private api:ServicesService) { }
+  constructor(private api:ServicesService, public datepipe: DatePipe) { }
 
   ngOnInit(): void {
   }
@@ -49,8 +48,8 @@ export class ModalComponent implements OnInit {
 
   postData(){
     const uploadData = new FormData();
-    uploadData.append("start", scheduleStart);
-    uploadData.append("end", scheduleStart);
+    uploadData.append("start", this.start);
+    uploadData.append("end", this.end);
     uploadData.append("title", this.title);
     this.api.CreateSchedule(uploadData).subscribe(response => {
       console.log(response)

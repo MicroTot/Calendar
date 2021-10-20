@@ -5,16 +5,16 @@ import { ModalComponent } from '../modal/modal.component';
 
 import {ServicesService  } from '../services.service'
 import { HttpClient } from '@angular/common/http';
-
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { now } from 'moment';
 // import * as $ from 'jquery';
 
-
-declare var $: any; // ADD THIS
+declare let $: any; // ADD THIS
 let d = new Date();
 var today = d.getDay();
 var time_now = d.getHours();
-var calendarEl = document.getElementById('calendar');
-let view = 'timeGridWeek'
+
 
 @Component({
   selector: 'app-scheduler',
@@ -22,65 +22,37 @@ let view = 'timeGridWeek'
   styleUrls: ['./scheduler.component.scss']
 })
 export class SchedulerComponent implements OnInit {
-  Events:any = [];
-  name: any;
-  showModal!: boolean;
-  calendarOptions!: CalendarOptions 
+  title:any;
+  start:any = []
+  end:any;
+  addEventForm!: FormGroup;
+  submitted = false;
+  //Add user form actions
+  get f() { return this.addEventForm.controls; }
+  onSubmit() {
+  
+    this.submitted = true;
+    // stop here if form is invalid and reset the validations
+    this.addEventForm.get('title')?.setValidators([Validators.required])
+    // this.addEventForm.get('title')?.setValidators([Validators.required]);
+    this.addEventForm.get('title')?.updateValueAndValidity();
+    if (this.addEventForm.invalid) {
+        return;
+    }}
     
-  constructor(public dialog: MatDialog, private api: ServicesService, private client:HttpClient) 
+  constructor(private formBuilder: FormBuilder, private api:ServicesService) 
   {}
+  calendarOptions!: CalendarOptions;
 
-  ngOnInit(): void {
-    this.getSchedules()
-    this.calendarConfigurations()
-  }
-  openDialog(){
-    this.dialog.open(ModalComponent)
-    console.log("hey")
-  }
-
-  getSchedules(){
-    return this.api.getScheduleData().subscribe(data=> {
-      this.Events.push(data);
-      console.log(this.Events)
-    });
-  }
-
-  deleteEmployee(id: number){
-    return this.api.deleteSchedule(id).subscribe(data => {
-      console.log(data);
-    },error=>{
-      console.log(error)
-    })
-  }
-
-  calendarConfigurations(){
+  ngOnInit() {
     this.calendarOptions = {
+      initialView: 'timeGridWeek',
+      dateClick: this.handleDateClick.bind(this),
       events: 'http://localhost:8000/',
-      initialView: view,
       weekends: false,
       height: "auto",
-      slotDuration: '00:15:00',
-      businessHours: {
-        // days of week. an array of zero-based day of week integers (0=Sunday)
-        daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Thursday
-        startTime: '09:00', // a start time (10am in this example)
-        endTime: '17:00', // an end time (6pm in this example)
-      },
-      eventClick: function(info) {
-        console.log(info)
-      },
-      headerToolbar: {
-        right: 'prev,next today',
-        center: 'title',
-        left: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      dateClick: function(info) {
-        let scheduleStartTime = info.dateStr
-        console.log("DATE LOGGED IS" + scheduleStartTime)
-        localStorage.removeItem("startTime")
-        localStorage.setItem("startTime", JSON.stringify(scheduleStartTime));
-      },
+      slotDuration: '0:15:00',
+      timeZone: 'UTC',
       dayMaxEvents: true,
       eventResizableFromStart: false,
       eventOverlap: false,
@@ -98,12 +70,55 @@ export class SchedulerComponent implements OnInit {
         start: Date.now(),
         // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
       },
-      
-      eventDidMount: function(info) {
-        // console.log(info.event.extendedProps);
-      }
-    };
+      headerToolbar: {
+        right: 'prev,next today',
+        center: 'title',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      businessHours: {
+        // days of week. an array of zero-based day of week integers (0=Sunday)
+        daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Thursday
+        startTime: '09:00', // a start time (10am in this example)
+        endTime: '17:00', // an end time (6pm in this example)
+      },
+  };
+  //Add User form validations
+  this.addEventForm = this.formBuilder.group({
+    title: ['', [Validators.required]]
+    });
+}
+//Show Modal with Forn on dayClick Event
+handleDateClick(arg:any) {
+  console.log(arg)
+  $("#myModal").modal("show");
+  $(".modal-title, .eventstarttitle").text("");
+  $(".modal-title").text("Add Event at : "+arg.dateStr);
+  $(".eventstarttitle").text(arg.dateStr);
+  this.start = arg.dateStr
+  this.end = arg.dateStr
+}
+//Hide Modal PopUp and clear the form validations
+hideForm(){
+  this.addEventForm.patchValue({ title : ""});
+  this.addEventForm.get('title')?.clearValidators();
+  this.addEventForm.get('title')?.updateValueAndValidity();
   }
 
+  onTitleChanged(event:any){
+    this.title = event.target.value;
+    console.log("title>>>" + this.title)
+  }
+
+  postData(){
+    const uploadData = new FormData();
+    uploadData.append("start", this.start);
+    uploadData.append("end", this.end);
+    uploadData.append("title", this.title);
+    this.api.CreateSchedule(uploadData).subscribe(response => {
+      console.log(response)
+      location.reload()
+      alert("Employee details uploaded successfully")//present toast
+    });
+  }
 }
   
