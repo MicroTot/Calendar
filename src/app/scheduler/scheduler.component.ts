@@ -47,12 +47,15 @@ export class SchedulerComponent implements OnInit {
   ngOnInit() {
     this.calendarOptions = {
       initialView: 'timeGridWeek',
+      allDaySlot: false,
+      eventColor: '#064dae',
+      eventMaxStack: 2,
       dateClick: this.handleDateClick.bind(this),
-      events: 'http://localhost:8000/',
+      events: 'https://7bdf-197-254-27-74.ngrok.io',
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
-      timeZone: 'UTC',
+      timeZone: 'EAT',
       dayMaxEvents: true,
       eventResizableFromStart: false,
       eventOverlap: false,
@@ -117,7 +120,7 @@ hideForm(){
     this.api.CreateSchedule(uploadData).subscribe(response => {
       console.log(response)
       location.reload()
-      alert("Employee details uploaded successfully")//present toast
+      // alert("testing testing 1 2 3")//present toast
     });
   }
 }
