@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarOptions, Duration } from '@fullcalendar/angular';
+import {ServicesService  } from '../services.service'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
-
-import {ServicesService  } from '../services.service'
-import { HttpClient } from '@angular/common/http';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { now } from 'moment';
 // import * as $ from 'jquery';
 
 declare let $: any; // ADD THIS
@@ -30,7 +26,6 @@ export class SchedulerComponent implements OnInit {
   //Add user form actions
   get f() { return this.addEventForm.controls; }
   onSubmit() {
-  
     this.submitted = true;
     // stop here if form is invalid and reset the validations
     this.addEventForm.get('title')?.setValidators([Validators.required])
@@ -40,18 +35,20 @@ export class SchedulerComponent implements OnInit {
         return;
     }}
     
-  constructor(private formBuilder: FormBuilder, private api:ServicesService) 
+  constructor(private formBuilder: FormBuilder, private api:ServicesService, private dialog:MatDialog) 
   {}
   calendarOptions!: CalendarOptions;
 
   ngOnInit() {
+
+
     this.calendarOptions = {
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
       eventMaxStack: 2,
       dateClick: this.handleDateClick.bind(this),
-      events: 'https://7bdf-197-254-27-74.ngrok.io',
+      events: 'http://localhost:8000/',
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
@@ -69,9 +66,8 @@ export class SchedulerComponent implements OnInit {
       firstDay: today,
       slotMinTime: "09:00:00",
       slotMaxTime: "17:00:00",
-      validRange: {
-        start: Date.now(),
-        // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
+      validRange: { 
+        start: Date.now(),    // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
       },
       headerToolbar: {
         right: 'prev,next today',
@@ -102,6 +98,7 @@ handleDateClick(arg:any) {
 }
 //Hide Modal PopUp and clear the form validations
 hideForm(){
+  $("#myModal").modal("hide");
   this.addEventForm.patchValue({ title : ""});
   this.addEventForm.get('title')?.clearValidators();
   this.addEventForm.get('title')?.updateValueAndValidity();

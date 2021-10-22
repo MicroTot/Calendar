@@ -54,7 +54,7 @@ export class ModalComponent implements OnInit {
     this.api.CreateSchedule(uploadData).subscribe(response => {
       console.log(response)
       location.reload()
-      alert("Employee details uploaded successfully")//present toast
+      alert("Schedule details uploaded successfully")//present toast
     });
   }
 }
