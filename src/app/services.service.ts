@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
-const endpoint = 'http://localhost:8000/'
+const endpoint = 'https://pesapalscheduler.herokuapp.com/'
 
 @Injectable({
   providedIn: 'root'
