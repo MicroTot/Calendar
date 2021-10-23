@@ -3,7 +3,6 @@ import { CalendarOptions, Duration } from '@fullcalendar/angular';
 import {ServicesService  } from '../services.service'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalComponent } from '../modal/modal.component';
 // import * as $ from 'jquery';
 
 declare let $: any; // ADD THIS
@@ -19,8 +18,9 @@ var time_now = d.getHours();
 })
 export class SchedulerComponent implements OnInit {
   title:any;
-  start:any = []
+  start:any;
   end:any;
+  color:any;
   addEventForm!: FormGroup;
   submitted = false;
   //Add user form actions
@@ -40,15 +40,13 @@ export class SchedulerComponent implements OnInit {
   calendarOptions!: CalendarOptions;
 
   ngOnInit() {
-
-
     this.calendarOptions = {
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
       eventMaxStack: 2,
-      dateClick: this.handleDateClick.bind(this),
-      events: 'http://localhost:8000/',
+      select: this.handleDateClick.bind(this),
+      events: 'http://localhost:8000/',  //events API endpoint
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
@@ -64,11 +62,20 @@ export class SchedulerComponent implements OnInit {
       showNonCurrentDates: false,
       scrollTime: time_now,
       firstDay: today,
-      slotMinTime: "09:00:00",
-      slotMaxTime: "17:00:00",
+      slotMinTime: "08:00:00",
+      slotMaxTime: "18:00:00",
       validRange: { 
-        start: Date.now(),    // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
+        start: Date.now(), // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
       },
+      dayCellDidMount: function(info:any) {
+        // console.log("info log is " + info.date )
+        if (info.date == 'Fri Nov 12 2021 03:00:00 GMT+0300 (East Africa Time)' || 
+              info.date ==  'Tue Nov 12 2024 03:00:00 GMT+0300 (East Africa Time)'
+            ){
+          info.el.insertAdjacentHTML('beforeend', '<i class="fc-content" aria-hidden="true">🎉🎉🎉🎉🎉</i>');
+        }
+    },
+      // slotLabelInterval:{minutes:15} , 
       headerToolbar: {
         right: 'prev,next today',
         center: 'title',
@@ -76,9 +83,9 @@ export class SchedulerComponent implements OnInit {
       },
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
-        daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Thursday
-        startTime: '09:00', // a start time (10am in this example)
-        endTime: '17:00', // an end time (6pm in this example)
+        daysOfWeek: [ 1, 2, 3, 4, 5  ], // Monday - Thursday
+        startTime: '08:00', // a start time (10am in this example)
+        endTime: '18:00', // an end time (6pm in this example)
       },
   };
   //Add User form validations
@@ -91,10 +98,10 @@ handleDateClick(arg:any) {
   console.log(arg)
   $("#myModal").modal("show");
   $(".modal-title, .eventstarttitle").text("");
-  $(".modal-title").text("Add Event at : "+arg.dateStr);
+  $(".modal-title").text("Add Event on  "+arg.start.toUTCString());
   $(".eventstarttitle").text(arg.dateStr);
-  this.start = arg.dateStr
-  this.end = arg.dateStr
+  this.start = arg.startStr
+  this.end = arg.endStr
 }
 //Hide Modal PopUp and clear the form validations
 hideForm(){
@@ -103,17 +110,22 @@ hideForm(){
   this.addEventForm.get('title')?.clearValidators();
   this.addEventForm.get('title')?.updateValueAndValidity();
   }
-
+  // get title
   onTitleChanged(event:any){
     this.title = event.target.value;
     console.log("title>>>" + this.title)
   }
-
+  // get user color
+  onColorChanged(event:any){
+    this.color = event.target.value;
+  }
+  // POST to API endpoint
   postData(){
     const uploadData = new FormData();
     uploadData.append("start", this.start);
     uploadData.append("end", this.end);
     uploadData.append("title", this.title);
+    uploadData.append("color", this.color);
     this.api.CreateSchedule(uploadData).subscribe(response => {
       console.log(response)
       location.reload()
