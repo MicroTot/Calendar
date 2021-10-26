@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-const endpoint = 'https://pesapalscheduler.herokuapp.com/'
+const endpoint = 'http://localhost:8000'
+const delete_endpoint = 'http://localhost:8000/changes/{id}'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class ServicesService {
   }
 
   public deleteSchedule(id:any){
-    return this.http.delete(endpoint, id);
+    return this.http.delete(delete_endpoint, id);
   }
 
   public updateSchedule(updateData: any){

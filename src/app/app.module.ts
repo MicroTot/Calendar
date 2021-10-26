@@ -22,6 +22,12 @@ import { DatePipe } from '@angular/common'
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { KabarnetComponent } from './kabarnet/kabarnet.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
+
+
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
   interactionPlugin,
@@ -34,7 +40,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AppComponent,
     SchedulerComponent,
     ModalComponent,
-    HomeComponent
+    HomeComponent,
+    KabarnetComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +52,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
+    MatTooltipModule
   
   ],
   providers: [DatePipe],

@@ -7,3 +7,7 @@
 .fc .fc-timegrid-now-indicator-line {
     display: none !important;
 }
+
+.modal-backdrop.show {
+    opacity: 0.3;
+}

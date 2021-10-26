@@ -3,6 +3,11 @@ import { CalendarOptions, Duration } from '@fullcalendar/angular';
 import {ServicesService  } from '../services.service'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { duration } from 'moment';
+
+
 // import * as $ from 'jquery';
 
 declare let $: any; // ADD THIS
@@ -17,10 +22,12 @@ var time_now = d.getHours();
   styleUrls: ['./scheduler.component.scss']
 })
 export class SchedulerComponent implements OnInit {
+  durationInSeconds = 10;
   title:any;
   start:any;
   end:any;
   color:any;
+  deleteid:any;
   addEventForm!: FormGroup;
   submitted = false;
   //Add user form actions
@@ -35,7 +42,13 @@ export class SchedulerComponent implements OnInit {
         return;
     }}
     
-  constructor(private formBuilder: FormBuilder, private api:ServicesService, private dialog:MatDialog) 
+  constructor(
+    private formBuilder: FormBuilder, 
+    private api:ServicesService, 
+    private dialog:MatDialog, 
+    private http:HttpClient,
+    private snack:MatSnackBar
+    ) 
   {}
   calendarOptions!: CalendarOptions;
 
@@ -46,6 +59,7 @@ export class SchedulerComponent implements OnInit {
       eventColor: '#064dae',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
+      eventClick: this.handleEventClick.bind(this),
       events: 'https://pesapalscheduler.herokuapp.com/',  //events API endpoint
       weekends: false,
       height: "auto",
@@ -98,17 +112,38 @@ handleDateClick(arg:any) {
   console.log(arg)
   $("#myModal").modal("show");
   $(".modal-title, .eventstarttitle").text("");
-  $(".modal-title").text("Add Event on  "+arg.start.toUTCString());
+  $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
   $(".eventstarttitle").text(arg.dateStr);
   this.start = arg.startStr
   this.end = arg.endStr
 }
+  // modal hide
+  removeModal(){
+    $("#myModalud").modal("hide");
+  }
 //Hide Modal PopUp and clear the form validations
 hideForm(){
   $("#myModal").modal("hide");
   this.addEventForm.patchValue({ title : ""});
   this.addEventForm.get('title')?.clearValidators();
   this.addEventForm.get('title')?.updateValueAndValidity();
+  }
+  // delete event by id
+  handleEventClick(data:any){
+    $("#myModalud").modal("show");
+    $(".modal-title").text("Delete event titled: " +data.event.title);
+    this.deleteid = data.event.id
+    console.log("event id is: " + data.event.id)
+  }
+  // delete by id
+  onDeleteById(){
+    this.http.delete( 'http://localhost:8000/changes/' + this.deleteid).subscribe(data => {
+        console.log(data);
+        this.snack.open("Schedule has been deleted successfully")
+        setTimeout( () => {
+          location.reload()
+        }, 1000)
+      });
   }
   // get title
   onTitleChanged(event:any){
@@ -122,13 +157,17 @@ hideForm(){
   // POST to API endpoint
   postData(){
     const uploadData = new FormData();
+    uploadData.append("title", this.title);
     uploadData.append("start", this.start);
     uploadData.append("end", this.end);
-    uploadData.append("title", this.title);
     uploadData.append("color", this.color);
     this.api.CreateSchedule(uploadData).subscribe(response => {
       console.log(response)
-      location.reload()
+      this.snack.open("Schedule has been created successfully")
+        // setTimeout( () => { location.reload() }, 1000 );
+        setTimeout( () => {
+          location.reload()
+        }, 1000)
       // alert("testing testing 1 2 3")//present toast
     });
   }
