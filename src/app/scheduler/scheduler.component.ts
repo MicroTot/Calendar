@@ -137,7 +137,7 @@ hideForm(){
   }
   // delete by id
   onDeleteById(){
-    this.http.delete( 'http://localhost:8000/changes/' + this.deleteid).subscribe(data => {
+    this.http.delete( 'https://pesapalscheduler.herokuapp.com/changes/' + this.deleteid).subscribe(data => {
         console.log(data);
         this.snack.open("Schedule has been deleted successfully")
         setTimeout( () => {
