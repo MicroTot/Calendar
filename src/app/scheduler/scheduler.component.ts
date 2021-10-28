@@ -133,10 +133,10 @@ hideForm(){
   }
   // delete event by id
   handleEventClick(data:any){
-    // $("#myModalud").modal("show");
-    // $(".modal-title").text("Delete event titled: " +data.event.title);
-    // this.deleteid = data.event.id
-    // console.log("event id is: " + data.event.id)
+    $("#myModalud").modal("show");
+    $(".modal-title").text("Delete event titled: " +data.event.title);
+    this.deleteid = data.event.id
+    console.log("event id is: " + data.event.id)
   }
   // delete by id
   onDeleteById(){

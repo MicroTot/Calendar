@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.getPersonalData()
+    this.getPersonalData()
     this.form = this.formBuilder.group({
       // required fields
       username: ['', [Validators.required]], //required
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       headers: myHeaders,
       redirect: 'follow'
     };
-    fetch("http://localhost:8000/apii", requestOptions)
+    fetch("https://pesapalscheduler2.herokuapp.com/apii", requestOptions)
       .then(response => response.text())
       .then(result => localStorage.setItem("userdata", result))
       .catch(error => console.log('error', error));
