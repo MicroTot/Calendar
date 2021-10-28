@@ -192,9 +192,17 @@ hideForm(){
     //     }, 1000)
     //   // alert("testing testing 1 2 3")//present toast
     // });
-    const authHeaders:any = localStorage.getItem("encoded")
+    var name = localStorage.getItem("username")
+    var pass = localStorage.getItem("password")
+    var encode1 = name + ":" + pass
+    var head = btoa(encode1)
+    var head2 = "Basic " + head
+    console.log(head2)
+    const authHeaders:any = localStorage.getItem("d")
+    var h = "Basic " + d
+    console.log(authHeaders)
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", authHeaders);
+    myHeaders.append("Authorization", head2);
     var formdata = new FormData();
     formdata.append("title", this.title);
     formdata.append("start", this.start);

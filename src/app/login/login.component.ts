@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPersonalData()
+    // this.getPersonalData()
     this.form = this.formBuilder.group({
       // required fields
       username: ['', [Validators.required]], //required
@@ -42,7 +42,9 @@ export class LoginComponent implements OnInit {
       this.token = console.log(res),
       localStorage.setItem("jwt_token", JSON.stringify(res)),
       this.getPersonalData(),
-      this.route.navigate(['home'])
+      localStorage.setItem("username", this.username),
+      localStorage.setItem("password", this.password),
+      this.route.navigate(["home"])
     ))
   }
 
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
     var myHeaders = new Headers();
     var decoded = this.username +":"+ this.password
     var encodeHeader = btoa(decoded)
-    var encoded = "Basic " +  encodeHeader
+    var encoded = encodeHeader
     localStorage.setItem("encoded", JSON.stringify(encoded))
     myHeaders.append("Authorization", encoded);
     var formdata = new FormData();
