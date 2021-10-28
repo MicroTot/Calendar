@@ -25,6 +25,9 @@ import { HomeComponent } from './home/home.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { KabarnetComponent } from './kabarnet/kabarnet.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { LoginComponent } from './login/login.component';
+
+import { FormsModule, } from '@angular/forms';
 
 
 
@@ -41,7 +44,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SchedulerComponent,
     ModalComponent,
     HomeComponent,
-    KabarnetComponent
+    KabarnetComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     NgbModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FormsModule
   
   ],
   providers: [DatePipe],

@@ -32,7 +32,9 @@
               "src/_redirects"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/css/Login-Form-Clean.css",
+              "src/assets/css/Login-screen.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js", 

@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { duration } from 'moment';
-
+import { Router } from '@angular/router';
+import jwt_decode from "jwt-decode";
 
 // import * as $ from 'jquery';
 
@@ -14,7 +14,6 @@ declare let $: any; // ADD THIS
 let d = new Date();
 var today = d.getDay();
 var time_now = d.getHours();
-
 
 @Component({
   selector: 'app-scheduler',
@@ -47,12 +46,14 @@ export class SchedulerComponent implements OnInit {
     private api:ServicesService, 
     private dialog:MatDialog, 
     private http:HttpClient,
-    private snack:MatSnackBar
+    private snack:MatSnackBar, 
+    private route:Router
     ) 
   {}
   calendarOptions!: CalendarOptions;
 
   ngOnInit() {
+    this.tokenValidator()
     this.calendarOptions = {
       initialView: 'timeGridWeek',
       allDaySlot: false,
@@ -60,7 +61,7 @@ export class SchedulerComponent implements OnInit {
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      events: 'https://pesapalscheduler.herokuapp.com/',  //events API endpoint
+      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',  //events API endpoint
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
@@ -116,6 +117,8 @@ handleDateClick(arg:any) {
   $(".eventstarttitle").text(arg.dateStr);
   this.start = arg.startStr
   this.end = arg.endStr
+
+  
 }
   // modal hide
   removeModal(){
@@ -137,14 +140,33 @@ hideForm(){
   }
   // delete by id
   onDeleteById(){
-    this.http.delete( 'https://pesapalscheduler.herokuapp.com/changes/' + this.deleteid).subscribe(data => {
-        console.log(data);
-        this.snack.open("Schedule has been deleted successfully")
-        setTimeout( () => {
-          location.reload()
-        }, 1000)
-      });
-  }
+    // this.http.delete( 'https://pesapalscheduler.herokuapp.com/changes/' + this.deleteid).subscribe(data => {
+    //     console.log(data);
+    //     this.snack.open("Schedule has been deleted successfully")
+    //     setTimeout( () => {
+    //       location.reload()
+    //     }, 1000)
+    //   });
+    // Delete by Auth user
+    // const authHeaders:any = localStorage.getItem("encoded")
+    // var myHeaders = new Headers();
+    // myHeaders.append("Authorization", authHeaders);
+
+    // var formdata = new FormData();
+    // var requestOptions:any = {
+    //   method: 'DELETE',
+    //   headers: myHeaders,
+    //   redirect: 'follow'
+    // };
+    // var API = "http://localhost:8000/update/" + this.deleteid
+    // fetch(API, requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => console.log(result))
+    //   // .then(result => location.reload())
+    //   // .then(result => this.snack.open(""))
+    //   .catch(error => console.log('error', error));
+      }
+
   // get title
   onTitleChanged(event:any){
     this.title = event.target.value;
@@ -156,20 +178,57 @@ hideForm(){
   }
   // POST to API endpoint
   postData(){
-    const uploadData = new FormData();
-    uploadData.append("title", this.title);
-    uploadData.append("start", this.start);
-    uploadData.append("end", this.end);
-    uploadData.append("color", this.color);
-    this.api.CreateSchedule(uploadData).subscribe(response => {
-      console.log(response)
-      this.snack.open("Schedule has been created successfully")
-        // setTimeout( () => { location.reload() }, 1000 );
-        setTimeout( () => {
-          location.reload()
-        }, 1000)
-      // alert("testing testing 1 2 3")//present toast
-    });
+    // const uploadData = new FormData();
+    // uploadData.append("title", this.title);
+    // uploadData.append("start", this.start);
+    // uploadData.append("end", this.end);
+    // uploadData.append("color", this.color);
+    // this.api.CreateSchedule(uploadData).subscribe(response => {
+    //   console.log(response)
+    //   this.snack.open("Schedule has been created successfully")
+    //     // setTimeout( () => { location.reload() }, 1000 );
+    //     setTimeout( () => {
+    //       location.reload()
+    //     }, 1000)
+    //   // alert("testing testing 1 2 3")//present toast
+    // });
+    const authHeaders:any = localStorage.getItem("encoded")
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", authHeaders);
+    var formdata = new FormData();
+    formdata.append("title", this.title);
+    formdata.append("start", this.start);
+    formdata.append("end", this.end);
+    formdata.append("color", this.color);
+    var requestOptions:any = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    fetch("https://pesapalscheduler2.herokuapp.com/api/appointments", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .then(result => location.reload())
+      .then(result => this.snack.open("Schedule has been created successfully"))
+      .catch(error => console.log('error', error));
+    }
+
+  // checks if user has logged in
+  tokenValidator(){
+    const token:any = localStorage.getItem("jwt_token")
+    // console.log(token)
+    if (token == null || token == "undefined"){
+      this.route.navigate([''])
+    }else{
+      console.log(jwt_decode("Decoded token is" + token));
+    }
   }
+  // logout user
+  logout(){
+    localStorage.clear()
+    location.reload()
+  }
+
 }
   

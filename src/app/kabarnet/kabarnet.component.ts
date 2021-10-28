@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarOptions, Duration } from '@fullcalendar/angular';
+import { HttpClient } from '@angular/common/http';
+import { TokenStorageServiceService } from '../token-storage-service.service';
+import jwt_decode from "jwt-decode";
 
 // vatiables
 declare let $: any; // ADD THIS
@@ -13,14 +16,21 @@ var time_now = d.getHours();
   styleUrls: ['./kabarnet.component.scss']
 })
 export class KabarnetComponent implements OnInit {
+  currentUser: any;
 
+  info: any
   constructor
-  ()
+  (private http:HttpClient,
+    private tokenStorageService: TokenStorageServiceService,
+    private token: TokenStorageServiceService
+    )
    { }
 
    calendarOptions!: CalendarOptions;
 
   ngOnInit(): void {
+    this.currentUser = this.token.getUser();
+
     this.calendarOptions = {
       initialView: 'timeGridWeek',
       allDaySlot: false,
@@ -71,4 +81,5 @@ export class KabarnetComponent implements OnInit {
       },
   };
   }
+  
 }

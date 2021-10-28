@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SchedulerComponent } from '../scheduler/scheduler.component';
+import jwt_decode from "jwt-decode";
+
 
 @Component({
   selector: 'app-home',
@@ -8,10 +9,27 @@ import { SchedulerComponent } from '../scheduler/scheduler.component';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  token:any
 
   constructor(private route:Router) { }
 
   ngOnInit(): void {
+    this.tokenValidator()
+  }
+
+  tokenValidator(){
+    const token:any = localStorage.getItem("jwt_token")
+    // console.log(token)
+    if (token == null || token == "undefined"){
+      this.route.navigate([''])
+    }else{
+      this.token = jwt_decode(token)
+    }
+  }
+
+  logout(){
+    localStorage.clear()
+    location.reload()
   }
 
   kabarnetRoute(){
