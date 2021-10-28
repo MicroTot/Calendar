@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
     var decoded = this.username +":"+ this.password
     var encodeHeader = btoa(decoded)
     var encoded = "Basic " +  encodeHeader
-    localStorage.setItem("encoded", encoded)
+    localStorage.setItem("encoded", JSON.stringify(encoded))
     myHeaders.append("Authorization", encoded);
     var formdata = new FormData();
     formdata.append("username", this.username);
