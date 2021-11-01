@@ -61,7 +61,7 @@ export class SchedulerComponent implements OnInit {
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      events: 'http://localhost:8000/api/appointments',  //events API endpoint
+      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',  //events API endpoint
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',

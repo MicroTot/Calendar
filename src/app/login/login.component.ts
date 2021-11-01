@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this.http.post("http://127.0.0.1:8000/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
+    this.http.post("https://pesapalscheduler2.herokuapp.com/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
       this.token = console.log(res),
       this.decoded = btoa(this.username +":"+ this.password),
       localStorage.setItem("encoded", this.decoded),

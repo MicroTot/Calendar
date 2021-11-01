@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
   
 
   getPersonalData(){
-    this.http.get('http://127.0.0.1:8000/apii').subscribe(res => {
+    this.http.get('https://pesapalscheduler2.herokuapp.com/apii').subscribe(res => {
     console.log(res)
     })
   }
