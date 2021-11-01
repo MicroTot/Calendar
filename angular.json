@@ -34,7 +34,12 @@
             "styles": [
               "src/styles.scss",
               "src/assets/css/Login-Form-Clean.css",
-              "src/assets/css/Login-screen.css"
+              "src/assets/css/Login-screen.css",
+              "src/assets/css/divider-text-middle.css",
+              "src/assets/css/Header---Apple.css",
+              "src/assets/css/Header-Dark.css",
+              "src/assets/css/Highlight-Clean.css",
+              "src/assets/css/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js", 

@@ -21,6 +21,7 @@ var time_now = d.getHours();
   styleUrls: ['./scheduler.component.scss']
 })
 export class SchedulerComponent implements OnInit {
+  token:any;
   durationInSeconds = 10;
   title:any;
   start:any;
@@ -179,8 +180,10 @@ hideForm(){
   tokenValidator(){
     const token:any = localStorage.getItem("jwt_token")
     // console.log(token)
-    if (!token){
+    if (token == null || token == "undefined"){
       this.route.navigate([''])
+    }else{
+      this.token = jwt_decode(token)
     }
   }
   // logout user

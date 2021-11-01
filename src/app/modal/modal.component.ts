@@ -1,19 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
-import { ServicesService } from '../services.service'
-import { DatePipe } from '@angular/common'
-
-const scheduleStart:any = localStorage.getItem('startTime')
-const date = new Date(scheduleStart)
-var x =  date.setDate(date.getDate())
-const t = new Date(x.toLocaleString())
-console.log(typeof + t)
-// const IsoDateTo = moment(scheduleStart,'yyyy-MM-ddThh:mm').format('yyyy-MM-ddThh:mm');
-// console.log(typeof + IsoDateTo)
-// const www = new Date( Date.parse(scheduleStart));
-// const vw = www.toLocaleDateString()
-
-// yyyy-MM-ddThh:mm
+import { Router } from '@angular/router';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-modal',
@@ -21,40 +8,23 @@ console.log(typeof + t)
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  times = scheduleStart.sr
-  start: any;
-  end: any;
-  title: any;
+  token:any;
 
-  constructor(private api:ServicesService, public datepipe: DatePipe) { }
+
+  constructor(private route:Router) { }
 
   ngOnInit(): void {
+    this.tokenValidator()
   }
 
-  onTitleChanged(event:any){
-    this.title = event.target.value;
-    console.log("title>>>" + this.title)
+  tokenValidator(){
+    const token:any = localStorage.getItem("jwt_token")
+    // console.log(token)
+    if (token == null || token == "undefined"){
+      this.route.navigate([''])
+    }else{
+      this.token = jwt_decode(token)
+    }
   }
 
-  onStartChanged(event:any){
-    this.start = event.target.value;
-    console.log("start time>>>" + this.start)
-  }
-
-  onEndChanged(event:any){
-    this.end = event.target.value;
-    console.log("start time>>>" + this.end)
-  }
-
-  postData(){
-    const uploadData = new FormData();
-    uploadData.append("start", this.start);
-    uploadData.append("end", this.end);
-    uploadData.append("title", this.title);
-    this.api.CreateSchedule(uploadData).subscribe(response => {
-      console.log(response)
-      location.reload()
-      alert("Schedule details uploaded successfully")//present toast
-    });
-  }
 }
