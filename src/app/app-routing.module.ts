@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { KabarnetComponent } from './kabarnet/kabarnet.component';
 import { LoginComponent } from './login/login.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
+import { AuthserviceService } from './services/authservice.service';
 
 const routes: Routes = [
   {
@@ -13,15 +14,15 @@ const routes: Routes = [
   },
   {
     path: 'schedule',
-    component: SchedulerComponent
+    component: SchedulerComponent,
   },
   {
     path: 'kabarnet',
-    component: KabarnetComponent
+    component: KabarnetComponent,
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
   },
 ];
 

@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
   username: any;
   password: any;
+  decoded: any;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,7 +24,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.getPersonalData()
     this.form = this.formBuilder.group({
       // required fields
       username: ['', [Validators.required]], //required
@@ -38,35 +39,20 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this.http.post("https://pesapalscheduler2.herokuapp.com/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
+    this.http.post("http://127.0.0.1:8000/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
       this.token = console.log(res),
+      this.decoded = btoa(this.username +":"+ this.password),
+      localStorage.setItem("encoded", this.decoded),
       localStorage.setItem("jwt_token", JSON.stringify(res)),
       this.getPersonalData(),
-      localStorage.setItem("username", this.username),
-      localStorage.setItem("password", this.password),
       this.route.navigate(["home"])
     ))
   }
 
   getPersonalData(){
-    var myHeaders = new Headers();
     var decoded = this.username +":"+ this.password
     var encodeHeader = btoa(decoded)
     var encoded = encodeHeader
-    localStorage.setItem("encoded", JSON.stringify(encoded))
-    myHeaders.append("Authorization", encoded);
-    var formdata = new FormData();
-    formdata.append("username", this.username);
-    formdata.append("password", this.password);
-    var requestOptions:any = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    fetch("https://pesapalscheduler2.herokuapp.com/apii", requestOptions)
-      .then(response => response.text())
-      .then(result => localStorage.setItem("userdata", result))
-      .catch(error => console.log('error', error));
-      }
-
+    localStorage.setItem("encoded", encoded)
+  }
 }

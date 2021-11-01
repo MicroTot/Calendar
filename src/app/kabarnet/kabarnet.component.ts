@@ -3,6 +3,7 @@ import { CalendarOptions, Duration } from '@fullcalendar/angular';
 import { HttpClient } from '@angular/common/http';
 import { TokenStorageServiceService } from '../token-storage-service.service';
 import jwt_decode from "jwt-decode";
+import { Router } from '@angular/router';
 
 // vatiables
 declare let $: any; // ADD THIS
@@ -22,7 +23,8 @@ export class KabarnetComponent implements OnInit {
   constructor
   (private http:HttpClient,
     private tokenStorageService: TokenStorageServiceService,
-    private token: TokenStorageServiceService
+    private token: TokenStorageServiceService,
+    private route:Router
     )
    { }
 
@@ -30,6 +32,7 @@ export class KabarnetComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
+    this.tokenValidator()
 
     this.calendarOptions = {
       initialView: 'timeGridWeek',
@@ -80,6 +83,15 @@ export class KabarnetComponent implements OnInit {
         endTime: '18:00', // an end time (6pm in this example)
       },
   };
+  }
+  tokenValidator(){
+    const token:any = localStorage.getItem("jwt_token")
+    // console.log(token)
+    if (!token){
+      this.route.navigate([''])
+    }else{
+      console.log(jwt_decode("Decoded token is" + token));
+    }
   }
   
 }

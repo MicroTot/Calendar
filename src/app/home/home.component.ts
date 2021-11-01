@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   username: any;
   password: any;
 
-  constructor(private route:Router) { }
+  constructor(private route:Router, private http:HttpClient) { }
 
   ngOnInit(): void {
     this.tokenValidator()
@@ -40,25 +41,12 @@ export class HomeComponent implements OnInit {
     this.route.navigate(['kabarnet'])
   }
 
+  
+
   getPersonalData(){
-    var myHeaders = new Headers();
-    var decoded = this.username +":"+ this.password
-    var encodeHeader = btoa(decoded)
-    var encoded = "Basic " +  encodeHeader
-    localStorage.setItem("encoded", encoded)
-    myHeaders.append("Authorization", encoded);
-    var formdata = new FormData();
-    formdata.append("username", this.username);
-    formdata.append("password", this.password);
-    var requestOptions:any = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    fetch("https://pesapalscheduler2.herokuapp.com/apii", requestOptions)
-      .then(response => response.text())
-      .then(result => this.info = localStorage.getItem("userdata"))
-      .catch(error => console.log('error', error));
-      }
+    this.http.get('http://127.0.0.1:8000/apii').subscribe(res => {
+    console.log(res)
+    })
+  }
 
 }

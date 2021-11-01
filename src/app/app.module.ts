@@ -15,7 +15,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { ModalComponent } from './modal/modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DatePipe } from '@angular/common'
@@ -28,6 +28,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { LoginComponent } from './login/login.component';
 
 import { FormsModule, } from '@angular/forms';
+import { AuthInterceptor } from '../app/auth.interceptor';
 
 
 
@@ -61,7 +62,12 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FormsModule
   
   ],
-  providers: [DatePipe],
-  bootstrap: [AppComponent]
+  providers: [DatePipe, 
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
+  bootstrap: [AppComponent, ]
 })
 export class AppModule { }

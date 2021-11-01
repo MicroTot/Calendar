@@ -61,7 +61,7 @@ export class SchedulerComponent implements OnInit {
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',  //events API endpoint
+      events: 'http://localhost:8000/api/appointments',  //events API endpoint
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
@@ -133,10 +133,10 @@ hideForm(){
   }
   // delete event by id
   handleEventClick(data:any){
-    $("#myModalud").modal("show");
-    $(".modal-title").text("Delete event titled: " +data.event.title);
-    this.deleteid = data.event.id
-    console.log("event id is: " + data.event.id)
+    // $("#myModalud").modal("show");
+    // $(".modal-title").text("Delete event titled: " +data.event.title);
+    // this.deleteid = data.event.id
+    // console.log("event id is: " + data.event.id)
   }
   // delete by id
   onDeleteById(){
@@ -147,30 +147,11 @@ hideForm(){
     //       location.reload()
     //     }, 1000)
     //   });
-    // Delete by Auth user
-    // const authHeaders:any = localStorage.getItem("encoded")
-    // var myHeaders = new Headers();
-    // myHeaders.append("Authorization", authHeaders);
-
-    // var formdata = new FormData();
-    // var requestOptions:any = {
-    //   method: 'DELETE',
-    //   headers: myHeaders,
-    //   redirect: 'follow'
-    // };
-    // var API = "http://localhost:8000/update/" + this.deleteid
-    // fetch(API, requestOptions)
-    //   .then(response => response.text())
-    //   .then(result => console.log(result))
-    //   // .then(result => location.reload())
-    //   // .then(result => this.snack.open(""))
-    //   .catch(error => console.log('error', error));
       }
 
   // get title
   onTitleChanged(event:any){
     this.title = event.target.value;
-    console.log("title>>>" + this.title)
   }
   // get user color
   onColorChanged(event:any){
@@ -178,58 +159,28 @@ hideForm(){
   }
   // POST to API endpoint
   postData(){
-    // const uploadData = new FormData();
-    // uploadData.append("title", this.title);
-    // uploadData.append("start", this.start);
-    // uploadData.append("end", this.end);
-    // uploadData.append("color", this.color);
-    // this.api.CreateSchedule(uploadData).subscribe(response => {
-    //   console.log(response)
-    //   this.snack.open("Schedule has been created successfully")
-    //     // setTimeout( () => { location.reload() }, 1000 );
-    //     setTimeout( () => {
-    //       location.reload()
-    //     }, 1000)
-    //   // alert("testing testing 1 2 3")//present toast
-    // });
-    var name = localStorage.getItem("username")
-    var pass = localStorage.getItem("password")
-    var encode1 = name + ":" + pass
-    var head = btoa(encode1)
-    var head2 = "Basic " + head
-    console.log(head2)
-    const authHeaders:any = localStorage.getItem("d")
-    var h = "Basic " + d
-    console.log(authHeaders)
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", head2);
-    var formdata = new FormData();
-    formdata.append("title", this.title);
-    formdata.append("start", this.start);
-    formdata.append("end", this.end);
-    formdata.append("color", this.color);
-    var requestOptions:any = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow'
-    };
-    fetch("https://pesapalscheduler2.herokuapp.com/api/appointments", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .then(result => location.reload())
-      .then(result => this.snack.open("Schedule has been created successfully"))
-      .catch(error => console.log('error', error));
+    const uploadData = new FormData();
+    uploadData.append("title", this.title);
+    uploadData.append("start", this.start);
+    uploadData.append("end", this.end);
+    uploadData.append("color", this.color);
+    this.api.CreateSchedule(uploadData).subscribe(response => {
+      console.log(response)
+      this.snack.open("Schedule has been created successfully")
+        // setTimeout( () => { location.reload() }, 1000 );
+        setTimeout( () => {
+          location.reload()
+        }, 1000)
+      // alert("testing testing 1 2 3")//present toast
+    });
     }
 
   // checks if user has logged in
   tokenValidator(){
     const token:any = localStorage.getItem("jwt_token")
     // console.log(token)
-    if (token == null || token == "undefined"){
+    if (!token){
       this.route.navigate([''])
-    }else{
-      console.log(jwt_decode("Decoded token is" + token));
     }
   }
   // logout user
