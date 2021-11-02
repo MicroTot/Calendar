@@ -27,14 +27,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Untitled</title>
+    <title>Pesapal Scheduler</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
 </head>
 
 <body>
     <header class="header-dark">
         <nav class="navbar navbar-dark navbar-expand-lg navigation-clean-search">
-            <div class="container"><a class="navbar-brand"><img src="https://www.pesapal.com/media/2102/logo.png" style="width:150px;"></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="container"><a href="home" class="navbar-brand"><img src="https://www.pesapal.com/media/2102/logo.png" style="width:150px;"></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav">
                         <li class="nav-item"></li>
@@ -71,7 +71,7 @@
             <div style="text-align:center;">
                 <h2 class="divider-style"><span>My Schudules</span></h2>
                 <div class="text-center" *ngFor="let item of saves">
-                  You booked a schedule titled '{{item.title}}', and was booked on {{item.start}} and ended on {{item.end}}
+                  You booked a schedule titled '{{item.title}}' between {{item.start}} and {{item.end}}
                     <!-- <full-calendar [options]="calendarOptions"></full-calendar> -->
                 </div>
             </div>

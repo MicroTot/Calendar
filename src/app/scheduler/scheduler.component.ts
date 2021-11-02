@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
+import { ModalComponent } from '../modal/modal.component';
 
 // import * as $ from 'jquery';
 
@@ -118,8 +119,6 @@ handleDateClick(arg:any) {
   $(".eventstarttitle").text(arg.dateStr);
   this.start = arg.startStr
   this.end = arg.endStr
-
-  
 }
   // modal hide
   removeModal(){
@@ -190,6 +189,10 @@ hideForm(){
   logout(){
     localStorage.clear()
     location.reload()
+  }
+  
+  userDetails(){
+    this.dialog.open(ModalComponent)
   }
 
 }
