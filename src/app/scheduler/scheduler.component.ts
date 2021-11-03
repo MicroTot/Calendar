@@ -3,11 +3,12 @@ import { CalendarOptions, Duration } from '@fullcalendar/angular';
 import {ServicesService  } from '../services.service'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { ModalComponent } from '../modal/modal.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import tippy from 'tippy.js';
 
 // import * as $ from 'jquery';
 
@@ -31,6 +32,7 @@ export class SchedulerComponent implements OnInit {
   deleteid:any;
   addEventForm!: FormGroup;
   submitted = false;
+
   //Add user form actions
   get f() { return this.addEventForm.controls; }
   onSubmit() {
@@ -47,23 +49,42 @@ export class SchedulerComponent implements OnInit {
     private formBuilder: FormBuilder, 
     private api:ServicesService, 
     private dialog:MatDialog, 
-    private http:HttpClient,
     private snack:MatSnackBar, 
-    private route:Router
-    ) 
-  {}
+    private route:Router,
+    private tip:MatTooltipModule
+    ) {}
+
   calendarOptions!: CalendarOptions;
 
   ngOnInit() {
     this.tokenValidator()
     this.calendarOptions = {
+      // eventDidMount: function(info){
+      //   // console.log("This is", info.timeText)
+      //   // info.el.firstChild.innerHTML = "Name: " + info.event.extendedProps.user + ('<br>') + "Title: " + info.event._def.title + ('<br>') + info.timeText
+      // },
+      eventMouseEnter: function(info:any){
+        var tooltip = tippy(info.el, {
+          content: "Owner: " + info.event.extendedProps.user,
+          placement: "top",
+          interactive: true,
+          arrow: true,
+          theme: "material",
+          appendTo: document.body,
+          allowHTML: true,
+          duration:[1, 1],
+          animation: 'scale-extreme',
+        });
+      },
+      progressiveEventRendering: true,
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
+      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
-      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',  //events API endpoint
+      eventDisplay: 'auto',
       weekends: false,
       height: "auto",
       slotDuration: '0:15:00',
@@ -78,21 +99,22 @@ export class SchedulerComponent implements OnInit {
       selectOverlap: false,
       showNonCurrentDates: false,
       scrollTime: time_now,
-      firstDay: today,
+      firstDay: 0,
       slotMinTime: "08:00:00",
       slotMaxTime: "18:00:00",
       validRange: { 
         start: Date.now(), // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
       },
+      // Add emoji on special days
       dayCellDidMount: function(info:any) {
         // console.log("info log is " + info.date )
         if (info.date == 'Fri Nov 12 2021 03:00:00 GMT+0300 (East Africa Time)' || 
               info.date ==  'Tue Nov 12 2024 03:00:00 GMT+0300 (East Africa Time)'
             ){
-          info.el.insertAdjacentHTML('beforeend', '<i class="fc-content" aria-hidden="true">🎉🎉🎉🎉🎉</i>');
+          info.el.insertAdjacentHTML('beforeend', '<i class="fc-content" aria-hidden="true">🎉</i>');
         }
     },
-      // slotLabelInterval:{minutes:15} , 
+      slotLabelInterval:{hours:1}, //time interval
       headerToolbar: {
         right: 'prev,next today',
         center: 'title',
@@ -100,9 +122,9 @@ export class SchedulerComponent implements OnInit {
       },
       businessHours: {
         // days of week. an array of zero-based day of week integers (0=Sunday)
-        daysOfWeek: [ 1, 2, 3, 4, 5  ], // Monday - Thursday
-        startTime: '08:00', // a start time (10am in this example)
-        endTime: '18:00', // an end time (6pm in this example)
+        daysOfWeek: [ 1, 2, 3, 4, 5  ], // Monday - Friday
+        startTime: '08:00', // a start time
+        endTime: '18:00', // an end time 
       },
   };
   //Add User form validations
@@ -123,6 +145,10 @@ handleDateClick(arg:any) {
   // modal hide
   removeModal(){
     $("#myModalud").modal("hide");
+  }
+  popup(info:any){
+    console.log("Name: " + info.event.extendedProps.user)
+    this.tip
   }
 //Hide Modal PopUp and clear the form validations
 hideForm(){
@@ -157,6 +183,18 @@ hideForm(){
   onColorChanged(event:any){
     this.color = event.target.value;
   }
+// disables 'Enter' keypress to prevent double submissions
+  handleEnterKeyPress(event:any) {
+    const tagName = event.target.tagName.toLowerCase();
+    if (tagName !== 'textarea') 
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
   // POST to API endpoint
   postData(){
     const uploadData = new FormData();
@@ -174,7 +212,6 @@ hideForm(){
       // alert("testing testing 1 2 3")//present toast
     });
     }
-
   // checks if user has logged in
   tokenValidator(){
     const token:any = localStorage.getItem("jwt_token")
@@ -190,7 +227,7 @@ hideForm(){
     localStorage.clear()
     location.reload()
   }
-  
+  // user name and email 
   userDetails(){
     this.dialog.open(ModalComponent)
   }

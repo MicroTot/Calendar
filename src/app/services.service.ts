@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-const endpoint = 'https://pesapalscheduler2.herokuapp.com/api/appointments'
-const delete_endpoint = 'https://pesapalscheduler2.herokuapp.com/api/appointments'
+const endpoint = 'https://pesapalscheduler2.herokuapp.com/appointments'
+const delete_endpoint = 'https://pesapalscheduler2.herokuapp.com/api/appointments/'
 
 @Injectable({
   providedIn: 'root'

@@ -21,3 +21,19 @@ body {
     height: 100%;
     overflow-x: hidden;
 }
+
+// tooltip customizations
+@import 'tippy.js/themes/light.css';
+@import 'tippy.js/themes/light-border.css';
+@import 'tippy.js/themes/material.css';
+@import 'tippy.js/themes/translucent.css';
+
+.tippy-box[data-theme~=material] {
+    background-color: #1976d2;
+    font-weight: 600;
+    padding-left: 5px;
+    border-radius: 6px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    color: aliceblue;
+}
