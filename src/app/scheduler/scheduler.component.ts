@@ -59,9 +59,9 @@ export class SchedulerComponent implements OnInit {
   ngOnInit() {
     this.tokenValidator()
     this.calendarOptions = {
-      // eventDidMount: function(info){
+      // eventDidMount: function(info:any){
       //   // console.log("This is", info.timeText)
-      //   // info.el.firstChild.innerHTML = "Name: " + info.event.extendedProps.user + ('<br>') + "Title: " + info.event._def.title + ('<br>') + info.timeText
+      //   info.el.firstChild.innerHTML = "Name: " + info.event.extendedProps.user + ('<br>') + "Title: " + info.event._def.title + ('<br>') + info.timeText
       // },
       eventMouseEnter: function(info:any){
         var tooltip = tippy(info.el, {

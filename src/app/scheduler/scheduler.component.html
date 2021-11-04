@@ -70,8 +70,40 @@
              </div> 
              <div class="col-sm-12">
               <div class="form-group">
-                    <label>Your Color:</label><div class="helloworld">
-                    <input class="titleinp form-control" type="color" (change)="onColorChanged($event)"></div>
+                    <!-- <label>Your Color:</label> -->
+                    <div class="helloworld">
+
+                      <input type="radio" name="color" id="red" value="red" (change)="onColorChanged($event)" />
+                          <label for="red"><span class="red"></span></label>
+
+                          <input type="radio" name="color" id="green"(change)="onColorChanged($event)" />
+                          <label for="green"><span class="green"></span></label>
+
+                          <input type="radio" name="color" id="yellow" (change)="onColorChanged($event)" value="yellow"/>
+                          <label for="yellow"><span class="yellow"></span></label>
+
+                          <input type="radio" name="color" id="olive" (change)="onColorChanged($event)" value="olive"/>
+                          <label for="olive"><span class="olive"></span></label>
+
+                          <input type="radio" name="color" id="orange" (change)="onColorChanged($event)" value="orange"/>
+                          <label for="orange"><span class="orange"></span></label>
+
+                          <input type="radio" name="color" id="teal" (change)="onColorChanged($event)" value="teal"/>
+                          <label for="teal"><span class="teal"></span></label>
+
+                          <input type="radio" name="color" id="blue" (change)="onColorChanged($event)" value="blue"/>
+                          <label for="blue"><span class="blue"></span></label>
+
+                          <input type="radio" name="color" id="violet" (change)="onColorChanged($event)" value="violet"/>
+                          <label for="violet"><span class="violet"></span></label>
+
+                          <input type="radio" name="color" id="purple" (change)="onColorChanged($event)" value="purple"/>
+                          <label for="purple"><span class="purple"></span></label>
+
+                          <input type="radio" name="color" id="pink" (change)="onColorChanged($event)" value="pink"/>
+                          <label for="pink"><span class="pink"></span></label>
+                    <!-- <input class="titleinp form-control" type="color" (change)="onColorChanged($event)"> -->
+                  </div>
                  </div> 
            </div> 
           </div>
@@ -102,13 +134,3 @@
   </div>
 </div>
 
-<style>
-  .tippy-box[data-theme~=material] {
-    background-color: #3cff00 !important;
-    font-weight: 600;
-    padding-left: 5px;
-    border-radius: 6px;
-    padding-right: 5px;
-    padding-bottom: 3px;
-}
-</style>

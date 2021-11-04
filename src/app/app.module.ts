@@ -29,8 +29,7 @@ import { LoginComponent } from './login/login.component';
 
 import { FormsModule, } from '@angular/forms';
 import { AuthInterceptor } from '../app/auth.interceptor';
-
-
+import { NgxColorsModule } from 'ngx-colors';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -59,8 +58,9 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     ReactiveFormsModule,
     MatSnackBarModule,
     MatTooltipModule,
-    FormsModule
-  
+    FormsModule, 
+    NgxColorsModule
+ 
   ],
   providers: [DatePipe, 
     {
