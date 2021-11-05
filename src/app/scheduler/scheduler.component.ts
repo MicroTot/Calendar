@@ -97,7 +97,7 @@ export class SchedulerComponent implements OnInit {
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
-      events: 'http://localhost:8000/api/appointments',
+      events: 'https://pesapalscheduler2.herokuapp.com//api/appointments',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
