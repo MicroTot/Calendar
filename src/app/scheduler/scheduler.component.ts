@@ -191,8 +191,8 @@ test(){
   uploadData.append("title", this.scheduleName);
   uploadData.append("start", this.time_select);
   uploadData.append("end", this.dropdownTime);
-  uploadData.append("color", this.color);
-  console.log(this.dropdownTime, "hey")
+  uploadData.append("color", this.colorScheme);
+  console.log(this.colorScheme, "hey")
   this.api.CreateSchedule(uploadData).subscribe(response => {
     console.log(response)
     this.snack.open("HAS THIS WORKED???!!!!!!!!!")
