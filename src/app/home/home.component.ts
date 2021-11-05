@@ -10,6 +10,12 @@ declare let $: any; // ADD THIS
 let d = new Date();
 var today = d.getDay();
 var time_now = d.getHours();
+const egg = `                                            
+
+╔═╗┌─┐┌─┐┌─┐┌─┐┌─┐┬  
+╠═╝├┤ └─┐├─┤├─┘├─┤│  
+╩  └─┘└─┘┴ ┴┴  ┴ ┴┴─┘                            
+`
 
 
 @Component({
@@ -28,6 +34,7 @@ export class HomeComponent implements OnInit {
   calendarOptions!: CalendarOptions;
 
   ngOnInit(): void {
+    console.log(egg)
     this.tokenValidator()
     this.getPersonalData()
 
