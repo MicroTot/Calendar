@@ -31,6 +31,10 @@ import { FormsModule, } from '@angular/forms';
 import { AuthInterceptor } from '../app/auth.interceptor';
 import { NgxColorsModule } from 'ngx-colors';
 
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+
+
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
   interactionPlugin,
@@ -59,7 +63,9 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MatSnackBarModule,
     MatTooltipModule,
     FormsModule, 
-    NgxColorsModule
+    NgxColorsModule,
+    MatSelectModule, 
+    MatInputModule
  
   ],
   providers: [DatePipe, 

@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 import { ModalComponent } from '../modal/modal.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import tippy from 'tippy.js';
+import * as moment from 'moment';
 
 // import * as $ from 'jquery';
 
@@ -32,6 +33,22 @@ export class SchedulerComponent implements OnInit {
   deleteid:any;
   addEventForm!: FormGroup;
   submitted = false;
+  time_select: any;
+  fifteen: any;
+  thirty: any
+  one_hour: any;
+  two_hour: any;
+
+  scheduleName:any;
+  colorScheme:any;
+  dropdownTime: any;
+
+  selected:any = [
+    '15 minutes',
+    '30 minutes',
+    '1 hour',
+    '2 hours',
+  ]
 
   //Add user form actions
   get f() { return this.addEventForm.controls; }
@@ -80,7 +97,7 @@ export class SchedulerComponent implements OnInit {
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
-      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',
+      events: 'http://localhost:8000/api/appointments',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
@@ -99,7 +116,7 @@ export class SchedulerComponent implements OnInit {
       selectOverlap: false,
       showNonCurrentDates: false,
       scrollTime: time_now,
-      firstDay: 0,
+      firstDay: today,
       slotMinTime: "08:00:00",
       slotMaxTime: "18:00:00",
       validRange: { 
@@ -132,15 +149,65 @@ export class SchedulerComponent implements OnInit {
     title: ['', [Validators.required]]
     });
 }
-//Show Modal with Forn on dayClick Event
+//Show Modal with Form on dayClick Event
 handleDateClick(arg:any) {
-  console.log(arg)
-  $("#myModal").modal("show");
-  $(".modal-title, .eventstarttitle").text("");
-  $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
-  $(".eventstarttitle").text(arg.dateStr);
-  this.start = arg.startStr
-  this.end = arg.endStr
+  let s1 = arg.startStr
+  let s2 = arg.endStr 
+  var newDateObj = moment(s1).add(15, 'm').format('YYYY-MM-DDTHH:mm:ss')
+  if (s2 == newDateObj){ //if start time and end time matches, it means its just a date click. then,
+    console.log(s2, "<=>", newDateObj) //the user is given a different form from selecting a number of dates
+    $("#myModal2").modal("show");
+    $(".modal-title, .eventstarttitle").text("")
+    $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
+    $(".eventstarttitle").text(arg.dateStr);
+    console.log("time to confirm against: ", arg)
+    this.time_select = arg.startStr
+    this.fifteen = moment(this.time_select).add(15, 'm').format("YYYY-MM-DDTHH:mm:ss")
+    this.thirty = moment(this.time_select).add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')
+    this.one_hour = moment(this.time_select).add(1, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+    this.two_hour = moment(this.time_select).add(2, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+    console.log(this.fifteen, this.time_select)
+  }else{
+    console.log("THIS CALLS THE SELECT FUNCTION", arg)
+    $("#myModal").modal("show");
+    $(".modal-title, .eventstarttitle").text("");
+    $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
+    $(".eventstarttitle").text(arg.dateStr);
+    this.start = arg.startStr
+    this.end = arg.endStr
+  }
+}
+newTitle(event:any){
+  this.scheduleName = event.target.value;
+}
+newColor(event:any){
+  this.colorScheme = event.target.value;
+}
+newEndTIme(event:any){
+  this.dropdownTime = event.target.value;
+}
+test(){
+  const uploadData = new FormData();
+  uploadData.append("title", this.scheduleName);
+  uploadData.append("start", this.time_select);
+  uploadData.append("end", this.dropdownTime);
+  uploadData.append("color", this.colorScheme);
+  console.log(this.colorScheme, "hey")
+  this.api.CreateSchedule(uploadData).subscribe(response => {
+    console.log(response)
+    this.snack.open("HAS THIS WORKED???!!!!!!!!!")
+      // setTimeout( () => { location.reload() }, 1000 );
+      setTimeout( () => {
+        location.reload()
+      }, 1000)
+    // alert("testing testing 1 2 3")//present toast
+  });
+  }
+// this function is for ONLY clicking a single event without selecting
+handleClick(){
+  console.log("USER HAS ONLY CLICKED ONE EVENT")
+  $("#myModal2").modal("show");
+    $(".modal-title, .eventstarttitle").text("");
 }
   // modal hide
   removeModal(){
@@ -151,12 +218,18 @@ handleDateClick(arg:any) {
     this.tip
   }
 //Hide Modal PopUp and clear the form validations
-hideForm(){
-  $("#myModal").modal("hide");
-  this.addEventForm.patchValue({ title : ""});
-  this.addEventForm.get('title')?.clearValidators();
-  this.addEventForm.get('title')?.updateValueAndValidity();
-  }
+  hideForm(){
+    $("#myModal").modal("hide");
+    this.addEventForm.patchValue({ title : ""});
+    this.addEventForm.get('title')?.clearValidators();
+    this.addEventForm.get('title')?.updateValueAndValidity();
+    }
+    hideForm2(){
+      $("#myModal2").modal("hide");
+      this.addEventForm.patchValue({ title : ""});
+      this.addEventForm.get('title')?.clearValidators();
+      this.addEventForm.get('title')?.updateValueAndValidity();
+      }
   // delete event by id
   handleEventClick(data:any){
     // $("#myModalud").modal("show");
