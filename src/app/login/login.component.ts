@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    this.http.post("https://pesapalscheduler2.herokuapp.com/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
+    this.http.post( environment.APIurl + "/api-token-auth/", this.form.getRawValue()).subscribe((res:any) => (
       this.token = console.log(res),
       this.decoded = btoa(this.username +":"+ this.password),
       localStorage.setItem("encoded", this.decoded),

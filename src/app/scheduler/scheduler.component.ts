@@ -11,6 +11,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import tippy from 'tippy.js';
 import * as moment from 'moment';
 
+import { environment } from '../../environments/environment'
+
 // import * as $ from 'jquery';
 
 declare let $: any; // ADD THIS
@@ -93,7 +95,7 @@ export class SchedulerComponent implements OnInit {
       initialView: 'timeGridWeek',
       allDaySlot: false,
       eventColor: '#064dae',
-      events: 'https://pesapalscheduler2.herokuapp.com/api/appointments',
+      events: environment.APIurl + '/api/appointments',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       eventClick: this.handleEventClick.bind(this),
