@@ -76,10 +76,6 @@ export class SchedulerComponent implements OnInit {
   ngOnInit() {
     this.tokenValidator()
     this.calendarOptions = {
-      // eventDidMount: function(info:any){
-      //   // console.log("This is", info.timeText)
-      //   info.el.firstChild.innerHTML = "Name: " + info.event.extendedProps.user + ('<br>') + "Title: " + info.event._def.title + ('<br>') + info.timeText
-      // },
       eventMouseEnter: function(info:any){
         var tooltip = tippy(info.el, {
           content: "Owner: " + info.event.extendedProps.user,
@@ -111,7 +107,7 @@ export class SchedulerComponent implements OnInit {
       eventOverlap: false,
       nowIndicator: true,
       droppable: true,
-      editable: false,
+      editable: true,
       selectable: true,
       selectOverlap: false,
       showNonCurrentDates: false,
@@ -155,7 +151,7 @@ handleDateClick(arg:any) {
   let s2 = arg.endStr 
   var newDateObj = moment(s1).add(15, 'm').format('YYYY-MM-DDTHH:mm:ss')
   if (s2 == newDateObj){ //if start time and end time matches, it means its just a date click. then,
-    console.log(s2, "<=>", newDateObj) //the user is given a different form from selecting a number of dates
+    console.log(s2, "<=>", newDateObj) //the user is given a different form from selecting a number of pre-determined time durations
     $("#myModal2").modal("show");
     $(".modal-title, .eventstarttitle").text("")
     $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
@@ -304,6 +300,5 @@ handleClick(){
   userDetails(){
     this.dialog.open(ModalComponent)
   }
-
 }
   
