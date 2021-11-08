@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  APIurl: "https://pesapalscheduler2.herokuapp.com"
 };
 
 /*
@@ -14,3 +15,14 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+
+
+/*
+
+for development endpoint: http://127.0.0.1:8000
+for production endpoint:https://pesapalscheduler2.herokuapp.com
+* DO NOT INCLUDE '/'   NOTHING WILL WORKKKKK!!!!!
+
+*/
+
+

@@ -5,19 +5,17 @@ import jwt_decode from "jwt-decode";
 import { CalendarOptions, Duration } from '@fullcalendar/angular';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
+import { environment } from 'src/environments/environment';
 
 declare let $: any; // ADD THIS
 let d = new Date();
 var today = d.getDay();
 var time_now = d.getHours();
 const egg = `                                            
-
 ╔═╗┌─┐┌─┐┌─┐┌─┐┌─┐┬  
 ╠═╝├┤ └─┐├─┤├─┘├─┤│  
 ╩  └─┘└─┘┴ ┴┴  ┴ ┴┴─┘                            
 `
-
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -114,7 +112,7 @@ export class HomeComponent implements OnInit {
 
   
   getPersonalData(){
-    this.http.get('https://pesapalscheduler2.herokuapp.com/apii').subscribe(res => {
+    this.http.get( environment.APIurl + '/apii').subscribe(res => {
     this.saves = res
     console.log(this.saves)
     })
