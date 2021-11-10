@@ -14,7 +14,7 @@
                <div class="collapse navbar-collapse" id="navcol-1">
                   <ul class="navbar-nav">
                      <li class="nav-item"></li>
-                     <li class="nav-item dropdown" style="color: #d9d9d9;">Hi there, <span style="font-size: larger; text-transform: capitalize;">{{token.username}}</span>
+                     <li class="nav-item dropdown" style="color: #d9d9d9;">Hi there, <span style="font-size: larger; text-transform: capitalize;">{{token?.username}}</span>
                      </li>
                   </ul>
                   <form class="form-inline mr-auto" target="_self">
@@ -186,6 +186,7 @@
                        </div>
                     </div>
                  </div>
+                 <mat-error>{{error}}</mat-error>
                  <button (keydown.enter)="handleEnterKeyPress($event)" style="justify-content: right; margin-right: 0; margin-left: auto; display: block;" type="button" class="btn btn-primary" (click)="test()" [disabled]="!addEventForm.valid">Submit</button>
                  </form>
               </div>
