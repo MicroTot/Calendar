@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   username: any;
   password: any;
   decoded: any;
+  error:any
 
 
   constructor(
@@ -47,6 +48,9 @@ export class LoginComponent implements OnInit {
       localStorage.setItem("jwt_token", JSON.stringify(res)),
       this.getPersonalData(),
       this.route.navigate(["home"])
+    ), 
+    (error:any) => (
+      this.error = error.error.non_field_errors
     ))
   }
 

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  APIurl: "https://pesapalscheduler2.herokuapp.com"
+  APIurl: "http://127.0.0.1:8000"
 };
 
 /*

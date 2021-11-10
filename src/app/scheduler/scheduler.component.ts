@@ -12,6 +12,7 @@ import tippy from 'tippy.js';
 import * as moment from 'moment';
 
 import { environment } from '../../environments/environment'
+import { HttpClient } from '@angular/common/http';
 
 // import * as $ from 'jquery';
 
@@ -45,6 +46,8 @@ export class SchedulerComponent implements OnInit {
   colorScheme:any;
   dropdownTime: any;
 
+  error:any;
+
   selected:any = [
     '15 minutes',
     '30 minutes',
@@ -56,9 +59,7 @@ export class SchedulerComponent implements OnInit {
   get f() { return this.addEventForm.controls; }
   onSubmit() {
     this.submitted = true;
-    // stop here if form is invalid and reset the validations
     this.addEventForm.get('title')?.setValidators([Validators.required])
-    // this.addEventForm.get('title')?.setValidators([Validators.required]);
     this.addEventForm.get('title')?.updateValueAndValidity();
     if (this.addEventForm.invalid) {
         return;
@@ -70,7 +71,8 @@ export class SchedulerComponent implements OnInit {
     private dialog:MatDialog, 
     private snack:MatSnackBar, 
     private route:Router,
-    private tip:MatTooltipModule
+    private tip:MatTooltipModule,
+    private http: HttpClient
     ) {}
 
   calendarOptions!: CalendarOptions;
@@ -151,22 +153,26 @@ export class SchedulerComponent implements OnInit {
 handleDateClick(arg:any) {
   let s1 = arg.startStr
   let s2 = arg.endStr 
+  let currentdate = moment().isUTC()
   var newDateObj = moment(s1).add(15, 'm').format('YYYY-MM-DDTHH:mm:ss')
+  if (s1 > currentdate){
+    // console.log("SELECT ANOTHER TIME, FOOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+  }
   if (s2 == newDateObj){ //if start time and end time matches, it means its just a date click. then,
-    console.log(s2, "<=>", newDateObj) //the user is given a different form from selecting a number of pre-determined time durations
+    // console.log(s2, "<=>", newDateObj, currentdate) //the user is given a different form from selecting a number of pre-determined time durations
     $("#myModal2").modal("show");
     $(".modal-title, .eventstarttitle").text("")
     $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
     $(".eventstarttitle").text(arg.dateStr);
-    console.log("time to confirm against: ", arg)
+    // console.log("time to confirm against: ", arg)
     this.time_select = arg.startStr
     this.fifteen = moment(this.time_select).add(15, 'm').format("YYYY-MM-DDTHH:mm:ss")
     this.thirty = moment(this.time_select).add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')
     this.one_hour = moment(this.time_select).add(1, 'hour').format('YYYY-MM-DDTHH:mm:ss')
     this.two_hour = moment(this.time_select).add(2, 'hour').format('YYYY-MM-DDTHH:mm:ss')
-    console.log(this.fifteen, this.time_select)
+    // console.log(this.fifteen, this.time_select)
   }else{
-    console.log("THIS CALLS THE SELECT FUNCTION", arg)
+    // console.log("THIS CALLS THE SELECT FUNCTION", arg)
     $("#myModal").modal("show");
     $(".modal-title, .eventstarttitle").text("");
     $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
@@ -190,20 +196,23 @@ test(){
   uploadData.append("start", this.time_select);
   uploadData.append("end", this.dropdownTime);
   uploadData.append("color", this.colorScheme);
-  console.log(this.colorScheme, "hey")
-  this.api.CreateSchedule(uploadData).subscribe(response => {
-    console.log(response)
-    this.snack.open("HAS THIS WORKED???!!!!!!!!!")
-      // setTimeout( () => { location.reload() }, 1000 );
-      setTimeout( () => {
-        location.reload()
-      }, 1000)
-    // alert("testing testing 1 2 3")//present toast
-  });
+  // console.log(this.colorScheme, "hey")
+  this.api.CreateSchedule(uploadData).subscribe((response:any)=>
+  (
+    // console.log(response),
+    this.snack.open("Schedule has been saved"),
+    setTimeout(() => {
+      location.reload()
+    }, 1000)
+  ),
+  ((error:any)=> (
+    this.error = error.error.non_field_errors
+  ))
+  )
   }
 // this function is for ONLY clicking a single event without selecting
 handleClick(){
-  console.log("USER HAS ONLY CLICKED ONE EVENT")
+  // console.log("USER HAS ONLY CLICKED ONE EVENT")
   $("#myModal2").modal("show");
     $(".modal-title, .eventstarttitle").text("");
 }
@@ -212,7 +221,7 @@ handleClick(){
     $("#myModalud").modal("hide");
   }
   popup(info:any){
-    console.log("Name: " + info.event.extendedProps.user)
+    // console.log("Name: " + info.event.extendedProps.user)
     this.tip
   }
 //Hide Modal PopUp and clear the form validations
@@ -274,7 +283,7 @@ handleClick(){
     uploadData.append("end", this.end);
     uploadData.append("color", this.color);
     this.api.CreateSchedule(uploadData).subscribe(response => {
-      console.log(response)
+      // console.log(response)
       this.snack.open("Schedule has been created successfully")
         // setTimeout( () => { location.reload() }, 1000 );
         setTimeout( () => {
@@ -287,7 +296,7 @@ handleClick(){
   tokenValidator(){
     const token:any = localStorage.getItem("jwt_token")
     // console.log(token)
-    if (token == null || token == "undefined"){
+    if (!token){
       this.route.navigate([''])
     }else{
       this.token = jwt_decode(token)
@@ -303,4 +312,3 @@ handleClick(){
     this.dialog.open(ModalComponent)
   }
 }
-  

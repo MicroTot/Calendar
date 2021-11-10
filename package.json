@@ -33,6 +33,7 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "ngx-colors": "^2.9.0",
+    "ngx-toastr": "^14.1.4",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "tippy.js": "^6.3.2",
