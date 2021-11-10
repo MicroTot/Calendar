@@ -33,6 +33,8 @@ import { NgxColorsModule } from 'ngx-colors';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -65,7 +67,12 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FormsModule, 
     NgxColorsModule,
     MatSelectModule, 
-    MatInputModule
+    MatInputModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: environment.production,
+  // Register the ServiceWorker as soon as the app is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})
  
   ],
   providers: [DatePipe, 

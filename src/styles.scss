@@ -21,7 +21,6 @@ body {
     height: 100%;
     overflow-x: hidden;
 }
-
 // tooltip customizations
 @import 'tippy.js/themes/light.css';
 @import 'tippy.js/themes/light-border.css';
@@ -38,7 +37,6 @@ body {
     color: aliceblue;
 }
 
-
 @keyframes tippy-box {
     0% {
         transform: scale(1.0);
@@ -47,3 +45,16 @@ body {
         transform: scale(2.0);
     }
 }
+// scrollbar color
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #701b1b; 
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(150, 150, 150); 
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 11, 11, 0.385); 
+  }
