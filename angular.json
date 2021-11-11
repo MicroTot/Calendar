@@ -43,7 +43,7 @@
               "src/assets/css/styles.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js", 
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "serviceWorker": true,
@@ -118,6 +118,16 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "fullcalendar:build:production",
+            "firebaseProject": "covid-5e270",
+            "firebaseHostingSite": "covid-5e270"
           }
         }
       }

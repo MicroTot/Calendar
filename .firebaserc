@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "covid-5e270": {
+      "hosting": {
+        "fullcalendar": [
+          "covid-5e270"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "covid-5e270"
+  }
+}

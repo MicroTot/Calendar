@@ -1,6 +1,6 @@
 {
-  "name": "fullcalendar",
-  "short_name": "fullcalendar",
+  "name": "Pesapal Scheduler",
+  "short_name": "Pesapal Scheduler",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
