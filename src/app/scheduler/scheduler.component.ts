@@ -18,8 +18,8 @@ import { HttpClient } from '@angular/common/http';
 
 declare let $: any; // ADD THIS
 let d = new Date();
-var today = d.getDay();
-var time_now = d.getHours();
+let today = d.getDay();
+let time_now = d.getHours();
 
 @Component({
   selector: 'app-scheduler',
@@ -41,13 +41,10 @@ export class SchedulerComponent implements OnInit {
   thirty: any
   one_hour: any;
   two_hour: any;
-
   scheduleName:any;
   colorScheme:any;
   dropdownTime: any;
-
   error:any;
-
   selected:any = [
     '15 minutes',
     '30 minutes',
@@ -64,12 +61,12 @@ export class SchedulerComponent implements OnInit {
     if (this.addEventForm.invalid) {
         return;
     }}
-    
+
   constructor(
-    private formBuilder: FormBuilder, 
-    private api:ServicesService, 
-    private dialog:MatDialog, 
-    private snack:MatSnackBar, 
+    private formBuilder: FormBuilder,
+    private api:ServicesService,
+    private dialog:MatDialog,
+    private snack:MatSnackBar,
     private route:Router,
     private tip:MatTooltipModule,
     private http: HttpClient
@@ -81,7 +78,7 @@ export class SchedulerComponent implements OnInit {
     this.tokenValidator()
     this.calendarOptions = {
       eventMouseEnter: function(info:any){
-        var tooltip = tippy(info.el, {
+        let tooltip = tippy(info.el, {
           content: "Owner: " + info.event.extendedProps.user,
           placement: "top",
           interactive: true,
@@ -119,13 +116,13 @@ export class SchedulerComponent implements OnInit {
       firstDay: today,
       slotMinTime: "08:00:00",
       slotMaxTime: "18:00:00",
-      validRange: { 
+      validRange: {
         start: Date.now(), // end: Date.now() + (7776000) // sets end dynamically to 90 days after now (86400*90)
       },
       // Add emoji on special days
       dayCellDidMount: function(info:any) {
         // console.log("info log is " + info.date )
-        if (info.date == 'Fri Nov 12 2021 03:00:00 GMT+0300 (East Africa Time)' || 
+        if (info.date == 'Fri Nov 12 2021 03:00:00 GMT+0300 (East Africa Time)' ||
               info.date ==  'Tue Nov 12 2024 03:00:00 GMT+0300 (East Africa Time)'
             ){
           info.el.insertAdjacentHTML('beforeend', '<i class="fc-content" aria-hidden="true">🎉</i>');
@@ -141,7 +138,7 @@ export class SchedulerComponent implements OnInit {
         // days of week. an array of zero-based day of week integers (0=Sunday)
         daysOfWeek: [ 1, 2, 3, 4, 5  ], // Monday - Friday
         startTime: '08:00', // a start time
-        endTime: '18:00', // an end time 
+        endTime: '18:00', // an end time
       },
   };
   //Add User form validations
@@ -151,34 +148,48 @@ export class SchedulerComponent implements OnInit {
 }
 //Show Modal with Form on dayClick Event
 handleDateClick(arg:any) {
+  let todaysDate = new Date()
+  let formattedDate = moment(todaysDate).format('YYYY-MM-DDTHH:mm:ss') //formatted version of todays date so a comparison can be made
+  // console.log("Today's date is: ", todaysDate) //todays date so a comparison can be made
   let s1 = arg.startStr
-  let s2 = arg.endStr 
+  let s2 = arg.endStr
   let currentdate = moment().isUTC()
-  var newDateObj = moment(s1).add(15, 'm').format('YYYY-MM-DDTHH:mm:ss')
-  if (s1 > currentdate){
-    // console.log("SELECT ANOTHER TIME, FOOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-  }
-  if (s2 == newDateObj){ //if start time and end time matches, it means its just a date click. then,
-    // console.log(s2, "<=>", newDateObj, currentdate) //the user is given a different form from selecting a number of pre-determined time durations
-    $("#myModal2").modal("show");
-    $(".modal-title, .eventstarttitle").text("")
-    $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
-    $(".eventstarttitle").text(arg.dateStr);
-    // console.log("time to confirm against: ", arg)
-    this.time_select = arg.startStr
-    this.fifteen = moment(this.time_select).add(15, 'm').format("YYYY-MM-DDTHH:mm:ss")
-    this.thirty = moment(this.time_select).add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')
-    this.one_hour = moment(this.time_select).add(1, 'hour').format('YYYY-MM-DDTHH:mm:ss')
-    this.two_hour = moment(this.time_select).add(2, 'hour').format('YYYY-MM-DDTHH:mm:ss')
-    // console.log(this.fifteen, this.time_select)
+  let newDateObj = moment(s1).add(15, 'm').format('YYYY-MM-DDTHH:mm:ss')
+  if (s1 < formattedDate){ //This checks if time is in the past. If so, 
+    this.snack.open("This date is in the past!", "close", {panelClass: "red", duration: 1000}) //present this toast 
   }else{
-    // console.log("THIS CALLS THE SELECT FUNCTION", arg)
-    $("#myModal").modal("show");
-    $(".modal-title, .eventstarttitle").text("");
-    $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
-    $(".eventstarttitle").text(arg.dateStr);
-    this.start = arg.startStr
-    this.end = arg.endStr
+    if (s2 == newDateObj){ //if start time and end time matches, it means its just a date click. then,
+      // console.log(s2, "<=>", newDateObj, currentdate) 
+      $("#myModal2").modal("show");  //the user is given a different form from selecting a number of pre-determined time durations
+      $(".modal-title, .eventstarttitle").text("")
+      $(".modal-title").text("Add Event on  " +arg.start.toUTCString());
+      $(".eventstarttitle").text(arg.dateStr);
+      // console.log(s2.startsWith("hi"))
+      // console.log("time to confirm against: ", arg)
+      this.time_select = arg.startStr
+      this.fifteen = moment(this.time_select).add(15, 'm').format("YYYY-MM-DDTHH:mm:ss")
+      this.thirty = moment(this.time_select).add(30, 'minutes').format('YYYY-MM-DDTHH:mm:ss')
+      this.one_hour = moment(this.time_select).add(1, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+      this.two_hour = moment(this.time_select).add(2, 'hour').format('YYYY-MM-DDTHH:mm:ss')
+      // console.log(this.fifteen, this.time_select)
+    }else{
+      // console.log("THIS CALLS THE SELECT FUNCTION", arg)
+      let dayName = moment(arg.startStr).format("dddd")
+      let startdate = moment(arg.startStr).format("LL")
+      let startDateDisplayed = moment(arg.startStr).format("HH:mm:ss")
+      let endDateDisplayed = moment(arg.endStr).format("HH:mm:ss")
+
+      const displayedMessage = "Add Event on " + startdate 
+      + "," + " on " + dayName + ", between " 
+      + startDateDisplayed + " to " + endDateDisplayed
+
+      $("#myModal").modal("show");
+      $(".modal-title, .eventstarttitle").text("");
+      $(".modal-title").text(displayedMessage);
+      $(".eventstarttitle").text(arg.dateStr);
+      this.start = arg.startStr
+      this.end = arg.endStr
+    }
   }
 }
 newTitle(event:any){
@@ -205,7 +216,7 @@ test(){
       location.reload()
     }, 1000)
   ),
-  ((error:any)=> (
+  ((error:any) => (
     this.error = error.error.non_field_errors
   ))
   )
@@ -253,6 +264,11 @@ handleClick(){
     //       location.reload()
     //     }, 1000)
     //   });
+    let array1:any = 'http://localhost:8000/apii'
+    let array2:any = 'http://localhost:8000/api/appointments'
+    if (array1.filter((element:any) => array2.includes(element))){
+      this.snack.open("This is my schedule")
+    }
       }
 
   // get title
@@ -266,7 +282,7 @@ handleClick(){
 // disables 'Enter' keypress to prevent double submissions
   handleEnterKeyPress(event:any) {
     const tagName = event.target.tagName.toLowerCase();
-    if (tagName !== 'textarea') 
+    if (tagName !== 'textarea')
     {
       return false;
     }
@@ -307,7 +323,7 @@ handleClick(){
     localStorage.clear()
     location.reload()
   }
-  // user name and email 
+  // user name and email
   userDetails(){
     this.dialog.open(ModalComponent)
   }
