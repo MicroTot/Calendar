@@ -13,6 +13,7 @@ import * as moment from "moment";
 
 import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
+import { ChangelogComponent } from "../changelog/changelog.component";
 
 // import * as $ from 'jquery';
 
@@ -47,6 +48,7 @@ export class SchedulerComponent implements OnInit {
   error: any;
   selected: any = ["15 minutes", "30 minutes", "1 hour", "2 hours"];
   idddddd:any //id for deleting events
+  form!: FormGroup;
 
   //Add user form actions
   get f() {
@@ -74,6 +76,9 @@ export class SchedulerComponent implements OnInit {
   calendarOptions!: CalendarOptions;
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+      title: ['', Validators.required],
+    })
     this.tokenValidator();
     this.calendarOptions = {
       eventDidMount: function (args: any) {
@@ -283,6 +288,13 @@ export class SchedulerComponent implements OnInit {
         );
     }
   }
+  // logs
+  logs(){
+    this.dialog.open(ChangelogComponent),
+    setTimeout(()=> {
+
+    },1000000000000000000000000000)
+  }
 
   newTitle(event: any) {
     this.scheduleName = event.target.value;
@@ -308,7 +320,7 @@ export class SchedulerComponent implements OnInit {
           location.reload();
         }, 1000)
       ),
-      (error: any) => (this.error = error.error.non_field_errors)
+      (error: any) => (this.error = "Kindly select a duration from the dropdown")
     );
   }
   // this function is for ONLY clicking a single event without selecting
