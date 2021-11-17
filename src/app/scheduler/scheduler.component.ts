@@ -306,7 +306,9 @@ export class SchedulerComponent implements OnInit {
     this.dropdownTime = event.target.value;
   }
   test() {
-    if (this.scheduleName != "undefined"){
+    if (!this.scheduleName){
+      this.snack.open("ENter a title!")
+    }else{
     const uploadData = new FormData();
     uploadData.append("title", this.scheduleName);
     uploadData.append("start", this.time_select);
@@ -323,10 +325,9 @@ export class SchedulerComponent implements OnInit {
       ),
       (error: any) => (this.error = "Select a duration from the dropdown!")
     );
-  }else{
-    this.snack.open("Add a title to your schedule!")
   }
 }
+
   // this function is for ONLY clicking a single event without selecting
   handleClick() {
     // console.log("USER HAS ONLY CLICKED ONE EVENT")
