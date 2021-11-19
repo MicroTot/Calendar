@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ApplicationModule, Component, OnInit } from "@angular/core";
 import { CalendarOptions, Duration } from "@fullcalendar/angular";
 import { ServicesService } from "../services.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -15,19 +15,19 @@ import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { ChangelogComponent } from "../changelog/changelog.component";
 
-// import * as $ from 'jquery';
-
+// vatiables
 declare let $: any; // ADD THIS
 let d = new Date();
 let today = d.getDay();
 let time_now = d.getHours();
 
 @Component({
-  selector: "app-scheduler",
-  templateUrl: "./scheduler.component.html",
-  styleUrls: ["./scheduler.component.scss"],
+  selector: 'app-training',
+  templateUrl: './training.component.html',
+  styleUrls: ['./training.component.scss']
 })
-export class SchedulerComponent implements OnInit {
+export class TrainingComponent implements OnInit {
+  apiEndpoint:any;
   token: any;
   durationInSeconds = 10;
   title: any;
@@ -48,7 +48,9 @@ export class SchedulerComponent implements OnInit {
   error: any;
   selected: any = ["15 minutes", "30 minutes", "1 hour", "2 hours"];
   idddddd:any //id for deleting events
+  location:any;
   form!: FormGroup;
+
 
   //Add user form actions
   get f() {
@@ -63,7 +65,8 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
-  constructor(
+  constructor
+  (
     private formBuilder: FormBuilder,
     private api: ServicesService,
     private dialog: MatDialog,
@@ -71,14 +74,14 @@ export class SchedulerComponent implements OnInit {
     private route: Router,
     private tip: MatTooltipModule,
     private http: HttpClient
-  ) {}
-
+  ) 
+  { }
   calendarOptions!: CalendarOptions;
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
-      // time: ['', Validators.required],
+      time: ['', Validators.required],
     })
     this.tokenValidator();
     this.calendarOptions = {
@@ -121,12 +124,13 @@ export class SchedulerComponent implements OnInit {
           });
         }
       },
+
       eventResize: this.handleUpdateData.bind(this),
       progressiveEventRendering: true,
       initialView: "timeGridWeek",
       allDaySlot: false,
       eventColor: "#064dae",
-      events: environment.APIurl + "/api/appointments",
+      events: environment.APIurl + '/api/training/appointments',
       eventMaxStack: 2,
       select: this.handleDateClick.bind(this),
       // eventClick: this.handleEventClick.bind(this),
@@ -182,6 +186,7 @@ export class SchedulerComponent implements OnInit {
       title: ["", [Validators.required]],
     });
   }
+
   //Show Modal with Form on dayClick Event
   handleDateClick(arg: any) {
     let todaysDate = new Date();

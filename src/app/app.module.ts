@@ -36,6 +36,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ChangelogComponent } from './changelog/changelog.component';
+import { TrainingComponent } from './training/training.component';
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -53,7 +54,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     HomeComponent,
     KabarnetComponent,
     LoginComponent,
-    ChangelogComponent
+    ChangelogComponent,
+    TrainingComponent
   ],
   imports: [
     BrowserModule,

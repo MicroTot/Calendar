@@ -5,6 +5,8 @@ import { environment } from '../environments/environment'
 const endpoint = environment.APIurl + '/api/appointments'
 const delete_endpoint = environment.APIurl + '/api/appointments/'
 
+const boardEnd = environment.APIurl + '/api/board/appointments'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,6 +29,16 @@ export class ServicesService {
   
   public CreateSchedule(uploadData: any){
     return this.http.post<any>(endpoint, uploadData);
+  }
+
+
+  // FOR BOARD ENDPOINTS
+  public getScheduleDataboard(){
+    return this.http.get(boardEnd);
+  }
+  
+  public CreateScheduleBoard(uploadData: any){
+    return this.http.post<any>(boardEnd, uploadData);
   }
 }
 

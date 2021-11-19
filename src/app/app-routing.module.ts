@@ -5,6 +5,7 @@ import { KabarnetComponent } from './kabarnet/kabarnet.component';
 import { LoginComponent } from './login/login.component';
 import { SchedulerComponent } from './scheduler/scheduler.component';
 import { AuthserviceService } from './services/authservice.service';
+import { TrainingComponent } from './training/training.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'training',
+    component: TrainingComponent,
   },
 ];
 

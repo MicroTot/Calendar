@@ -150,8 +150,8 @@
                        <div class="form-group">
                           <label>End Meeting in:</label>
                           <div class="helloworld">
-                             <select class="titleinp form-control" (change)="newEndTIme($event)" ngModel [ngModelOptions]="{standalone: true}">
-                                <option value="" disabled>Ending Time ↓</option>
+                             <select class="titleinp form-control"  (change)="newEndTIme($event)"   >
+                                <option value=""   >Ending Time ↓</option>
                                 <option value={{fifteen}} >15 minutes</option>
                                 <option value={{thirty}} >30 minutes</option>
                                 <option value={{one_hour}} >1 hour</option>

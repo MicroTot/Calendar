@@ -45,10 +45,10 @@
     <div style="padding: 30px;">
         <div class="buttons" >
             <div>
-                <h4>Book a Schedule at Kabarnet Boardroom</h4>
+                <h4>Book a Schedule at Kabarnet Training Room</h4>
             </div>
             <!-- <div class="btn btn-secondary" role="" href="training" disabled>BoardRoom</div> -->
-            <a class="btn btn-primary" href="training" role="button">Training Room</a>
+            <a class="btn btn-primary" href="kabarnet" role="button">BoardRoom</a>
         </div>
     </div>
       <!-- <div class="container"> -->
@@ -145,23 +145,24 @@
                  <button type="button" class="close" (click)="hideForm2()" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <form [formGroup]="addEventForm" (ngSubmit)="onSubmit()">
+                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                  <div class="row">
                     <div class="col-sm-12">
                        <div class="form-group">
                           <label>Event Title:</label>
-                          <input formControlName="title" (change)="newTitle($event)" placeholder="Add Event Title here" type="text" class="titleinp form-control" />
- 
-
-                          <!-- </div> -->
+                          <input (change)="newTitle($event)" placeholder="Add Event Title" type="text" formControlName="title" class="titleinp form-control" [ngClass]="{ 'is-invalid': submitted && f.title.errors }" />
+                          <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                             <div *ngIf="f.title.errors.required">Title is required</div>
+                          </div>
                        </div>
                     </div>
                     <div class="col-sm-12">
                        <div class="form-group">
                           <label>End Meeting in:</label>
                           <div class="helloworld">
-                             <select class="titleinp form-control"  (change)="newEndTIme($event)"   >
-                                <option value={{fifteen}}>15 minutes</option>
+                             <select class="titleinp form-control" formControlName="title" (change)="newEndTIme($event)">
+                                <option value="" disabled>Ending Time ↓</option>
+                                <option value={{fifteen}} >15 minutes</option>
                                 <option value={{thirty}} >30 minutes</option>
                                 <option value={{one_hour}} >1 hour</option>
                                 <option value={{two_hour}} >2 hours</option>
@@ -196,9 +197,7 @@
                     </div>
                  </div>
                  <mat-error>{{error}}</mat-error>
-                 <button (keydown.enter)="handleEnterKeyPress($event)"
-                  style="justify-content: right; margin-right: 0; margin-left: auto; display: block;" 
-                  type="submit" class="btn btn-primary" (click)="test()" [disabled]="!addEventForm.valid">Submit here</button>
+                 <button (keydown.enter)="handleEnterKeyPress($event)" style="justify-content: right; margin-right: 0; margin-left: auto; display: block;" type="button" class="btn btn-primary" (click)="test()" [disabled]="!addEventForm.valid">Submit</button>
                  </form>
               </div>
            </div>
